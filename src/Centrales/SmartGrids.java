@@ -1,22 +1,66 @@
 package Centrales;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SmartGrids implements ISmartGrids {
-    @Override
-    public void registrarPlantaSolar(String nombre, String direccion, double capacidadMaxima, String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, double eficienciaPromedio, double superficieCubierta, int cantidadPaneles, double horasRadiacionDiaria) {
+import Centrales.Plantas.Planta;
+import Centrales.Plantas.PlantaEolica;
+import Centrales.Plantas.PlantaHidraulica;
+import Centrales.Plantas.PlantaSolar;
 
+
+public class SmartGrids implements ISmartGrids {
+	private Map<Integer, Planta> plantas = new HashMap<>();
+	
+    @Override
+    public void registrarPlantaSolar(
+    		String nombre,
+    		String direccion,
+    		double capacidadMaxima,
+    		String fechaHoraPuestaEnFuncionamiento, // dentro de PantaSolar lo renombramos a fechaApertura
+    		String fuentePrimaria,
+    		double eficienciaPromedio,
+    		double superficieCubierta,
+    		int cantidadPaneles,
+    		double horasRadiacionDiaria
+    		) {
+    	/*sistema.registrarPlantaSolar(
+    	 * "Solar Norte",	nombre
+    	 * "Ruta 1",		direccion
+    	 * 1000,			capacidad maxima
+    	 * INICIO,			fecha apertura
+    	 * "Sol",			fuente primaria
+    	 * 0.8,				eficiencia promedio
+    	 * 1500,			superficie cubierta
+    	 * 12,				cantidad de paneles
+    	 * 10				horas de radiacion
+    	 * );*/
+    	PlantaSolar plantaSolar = new PlantaSolar(0, nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, fuentePrimaria, eficienciaPromedio, superficieCubierta, cantidadPaneles, horasRadiacionDiaria);
+    	plantas.put(0, plantaSolar);
     }
 
     @Override
     public void registrarPlantaEolica(String nombre, String direccion, double capacidadMaxima, String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, double eficienciaPromedio, int cantidadAerogeneradores, double alturaTorres, double velocidadMinimaViento) {
-
+    	/*sistema.registrarPlantaEolica(
+    	 * "Eolica Sur",	nombre
+    	 * "Ruta 2",		direccion
+    	 * 800,				capacidad maxima
+    	 * INICIO,			fecha apertura
+    	 * "Viento",		fuente primaria
+    	 * 0.75,			eficiencia promedio
+    	 * 4,				cantidad de aerogeneradores
+    	 * 80,				altura torres
+    	 * 5				velocidad minima de viento
+    	 * );*/
+    	PlantaEolica plantaEolica = new PlantaEolica(1, nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, fuentePrimaria, eficienciaPromedio, cantidadAerogeneradores, alturaTorres, velocidadMinimaViento);
+    	plantas.put(1, plantaEolica);
     }
 
     @Override
     public void registrarPlantaHidraulica(String nombre, String direccion, double capacidadMaxima, String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, double eficienciaPromedio, int cantidadTurbinas, double capacidadEmbalse) {
-
+    	PlantaHidraulica plantaHidraulica = new PlantaHidraulica(2, nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, fuentePrimaria, eficienciaPromedio, cantidadTurbinas, capacidadEmbalse);
+    	plantas.put(2, plantaHidraulica);
     }
 
     @Override
