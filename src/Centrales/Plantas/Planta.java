@@ -1,5 +1,8 @@
 package Centrales.Plantas;
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class abstract Planta {
 //	private Integer idPlanta;
