@@ -185,5 +185,4 @@ public class abstract Planta {
 	public double getCuotaMinima() {
 		return this.cuotaMinima;
 	}
-	
 }
