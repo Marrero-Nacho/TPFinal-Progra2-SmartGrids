@@ -48,7 +48,7 @@ public class abstract Planta {
 		this.periodosInactividad = new ArrayList<>();
 	}
 	//metodos abstractos, adaptaran su comportamiento dependiendo la clase de planta
-	//
+	
 	public abstract double getCapacidadMinimaCuota();
 	public abstract boolean cumplioCuota(RegistroMonitoreo registro)
 	public abstract boolean esRenovable();
