@@ -11,7 +11,7 @@ import Centrales.Plantas.PlantaSolar;
 
 
 public class SmartGrids implements ISmartGrids {
-	private Map<Integer, Planta> plantas = new HashMap<>();
+	private Map<String, Planta> plantas = new HashMap<>();
 	
     @Override
     public void registrarPlantaSolar(
@@ -36,8 +36,8 @@ public class SmartGrids implements ISmartGrids {
     	 * 12,				cantidad de paneles
     	 * 10				horas de radiacion
     	 * );*/
-    	PlantaSolar plantaSolar = new PlantaSolar(0, nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, fuentePrimaria, eficienciaPromedio, superficieCubierta, cantidadPaneles, horasRadiacionDiaria);
-    	plantas.put(0, plantaSolar);
+    	PlantaSolar plantaSolar = new PlantaSolar(nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, fuentePrimaria, eficienciaPromedio, superficieCubierta, cantidadPaneles, horasRadiacionDiaria);
+    	plantas.put("planta0", plantaSolar);
     }
 
     @Override
@@ -53,14 +53,14 @@ public class SmartGrids implements ISmartGrids {
     	 * 80,				altura torres
     	 * 5				velocidad minima de viento
     	 * );*/
-    	PlantaEolica plantaEolica = new PlantaEolica(1, nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, fuentePrimaria, eficienciaPromedio, cantidadAerogeneradores, alturaTorres, velocidadMinimaViento);
-    	plantas.put(1, plantaEolica);
+    	PlantaEolica plantaEolica = new PlantaEolica(nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, fuentePrimaria, eficienciaPromedio, cantidadAerogeneradores, alturaTorres, velocidadMinimaViento);
+    	plantas.put("planta01", plantaEolica);
     }
 
     @Override
     public void registrarPlantaHidraulica(String nombre, String direccion, double capacidadMaxima, String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, double eficienciaPromedio, int cantidadTurbinas, double capacidadEmbalse) {
-    	PlantaHidraulica plantaHidraulica = new PlantaHidraulica(2, nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, fuentePrimaria, eficienciaPromedio, cantidadTurbinas, capacidadEmbalse);
-    	plantas.put(2, plantaHidraulica);
+    	PlantaHidraulica plantaHidraulica = new PlantaHidraulica(nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, fuentePrimaria, eficienciaPromedio, cantidadTurbinas, capacidadEmbalse);
+    	plantas.put("planta02", plantaHidraulica);
     }
 
     @Override

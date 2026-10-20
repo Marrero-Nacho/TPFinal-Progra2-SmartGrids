@@ -1,10 +1,13 @@
 package Centrales.Plantas;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class abstract Planta {
+import Centrales.Registros.RegistroMonitoreo;
+
+public abstract class  Planta {
 //	private Integer idPlanta;
 	private String nombre;
 	private String direccion;
@@ -13,31 +16,31 @@ public class abstract Planta {
 	private String fechaApertura;
 	private double cuotaMinima;
     private ArrayList<RegistroMonitoreo> registrosMonitoreo;
+    private ArrayList<PeriodoInactividad> periodosInactividad;
 	
 	
-    private static class PeriodoInactividad { 
+   private static class PeriodoInactividad { 
 		private LocalDateTime inicio; 
 		private LocalDateTime fin; // null si sigue inactiva 
 		public PeriodoInactividad(LocalDateTime inicio) { 
 			this.inicio = inicio; 
 			this.fin = null; 
 			} 
-		public void setFin(LocalDateTime fin) { 
+			public void setFin(LocalDateTime fin) { 
 				this.fin = fin;
 				} 
-		public boolean estabaInactivaEn(LocalDateTime fechaHora) {
-			if (fechaHora.isBefore(inicio)) {
+			public boolean estabaInactivaEn(LocalDateTime fechaHora) {
+				if (fechaHora.isBefore(inicio)) {
 					
-				return false; 
+					return false; 
 					} 
-			if (fin == null) { 
-				return true;
+				if (fin == null) { 
+					return true;
 					
 				}
-			return !fechaHora.isAfter(fin); 
+				return !fechaHora.isAfter(fin); 
 		}
-	}
-	
+	}	
 	
 	public Planta(String nombre, String direccion, double capacidadMax, String fechaApertura) {
 //	    this.idPlanta = idPlanta; los metodos de IsmartGrids no requieren idPlanta
@@ -53,7 +56,7 @@ public class abstract Planta {
 	//metodos abstractos, adaptaran su comportamiento dependiendo la clase de planta
 	
 	public abstract double getCapacidadMinimaCuota();
-	public abstract boolean cumplioCuota(RegistroMonitoreo registro)
+	public abstract boolean cumplioCuota(RegistroMonitoreo registro);
 	public abstract boolean esRenovable();
 	
 	//metodos
@@ -95,7 +98,7 @@ public class abstract Planta {
 			throw new RuntimeException("No se puede registrar monitoreo en una planta inactiva."); 
 			
 		} 
-		if (registro.getFechaHora().isBefore(this.fechaPuestaEnFuncionamiento)) {
+		if (registro.getFechaHora().isBefore(LocalDateTime.parse(this.fechaApertura))) {
 			
 			throw new RuntimeException("La fecha de monitoreo es anterior a la puesta en funcionamiento."); 
 		}
@@ -125,7 +128,7 @@ public class abstract Planta {
 			int hora = r.getFechaHora().getHour();
 			incidencias[hora] += r.getCantidadIncidencias();
 		}
-		return incidencias
+		return incidencias;
 	}
 	public boolean nuncaCumplioCuota() {
 		if (registrosMonitoreo.isEmpty()) {
@@ -140,7 +143,7 @@ public class abstract Planta {
 		
 	}
 	public int limpiarMonitoreoSinDatos() {
-		list<RegistroMonitoreo> sinDatos = new ArrayList<>();
+		ArrayList<RegistroMonitoreo> sinDatos = new ArrayList<>();
 		for(RegistroMonitoreo r : registrosMonitoreo) {
 			if (r.getEnergiaGenerada() == 0 && r.getCantidadIncidencias() == 0) {
 				
@@ -168,15 +171,14 @@ public class abstract Planta {
 		return this.capacidadMax;
 		
 	}
-	public LocalDateTime getFechaPuestaEnFuncionamiento() {
-		
-		return this.fechaPuestaEnFuncionamiento;
+	public LocalDateTime getFechaApertura() {
+		return LocalDateTime.parse(this.fechaApertura);
 		
 	}
 	
-	public List<RegistroMonitoreo> getRegistrosMonitoreo(){
+	public ArrayList<RegistroMonitoreo> getRegistrosMonitoreo(){
 		
-		return registroMonitoreo;
+		return this.registrosMonitoreo;
 	}
 	public void setCuotaMinima(double cuotaMinima) {
 		

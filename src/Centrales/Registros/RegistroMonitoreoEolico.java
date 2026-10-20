@@ -1,11 +1,11 @@
 package Centrales.Registros;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class RegistroMonitoreoEolico extends RegistroMonitoreo{
     private double velocidadVientoPromedio;
 
-    public RegistroMonitoreoEolico(LocalDate fechaHora, double energiaGenerada, int cantidadIncidencias, double velocidadVientoPromedio) {
+    public RegistroMonitoreoEolico(LocalDateTime fechaHora, double energiaGenerada, int cantidadIncidencias, double velocidadVientoPromedio) {
         super(fechaHora, energiaGenerada, cantidadIncidencias);
         this.velocidadVientoPromedio = velocidadVientoPromedio;
     }
