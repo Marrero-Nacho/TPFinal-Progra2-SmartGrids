@@ -155,12 +155,11 @@ public abstract class  Planta {
 		return sinDatos.size();
 	}
 	
-	/// falta public int[] getIncidenciasPorHora()
 	public int[] getHistogramaCumplimiento(LocalDateTime desde, LocalDateTime hasta) { 
 		int[] hist = new int[24];
 		for (RegistroMonitoreo r : registrosMonitoreo) { 
 			LocalDateTime fh = r.getFechaHora(); 
-			// Verifica que la fechaHora esté dentro del rango inclusivo [desde, hasta] 
+
 			if (!fh.isBefore(desde) && !fh.isAfter(hasta)) { 
 				if (cumplioCuota(r)) { 
 					int hora = fh.getHour(); 
