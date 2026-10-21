@@ -1,20 +1,20 @@
 package Centrales.Registros;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class RegistroMonitoreo {
-    private LocalDate fechaHora;
+    private LocalDateTime fechaHora;
     private double energiaGenerada;
     private int cantidadIncidencias;
 
-    public RegistroMonitoreo(LocalDate fechaHora, double energiaGenerada, int cantidadIncidencias) {
+    public RegistroMonitoreo(LocalDateTime fechaHora, double energiaGenerada, int cantidadIncidencias) {
         this.fechaHora = fechaHora;
         this.energiaGenerada = energiaGenerada;
         this.cantidadIncidencias = cantidadIncidencias;
     }
 
     public void crearRegistroMonitoreo(RegistroMonitoreo registroMonitoreo) {}
-    public LocalDate getFechaHora() {
+    public LocalDateTime getFechaHora() {
         return fechaHora;
     }
     public double getEnergiaGenerada() {
