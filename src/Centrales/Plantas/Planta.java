@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import Centrales.Registros.RegistroMonitoreo;
 
-public abstract class  Planta {
+public abstract class  Planta implements Comparable<Planta> {
 	private String nombre;
 	private String direccion;
 	private double capacidadMax;
@@ -161,6 +161,20 @@ public abstract class  Planta {
 			}
 		}
 		return hist; 
+	}
+	@Override 
+	public int compareTo(Planta otra){
+		if (this.getTotalGenerado() > otra.getTotalGenerado()){
+			return -1; //la planta actual tiene mas energia generada.
+		}
+		else if(this.getTotalGenerado() < otra.getTotalGenerado()){
+			return 1; //la planta actual tiene menos energia generada
+
+		}
+		else {
+			return 0; // tiene la misma energia 
+		}
+
 	}
 //getters
 	public String getNombre() {
