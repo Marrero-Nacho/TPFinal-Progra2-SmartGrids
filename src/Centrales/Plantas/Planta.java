@@ -42,11 +42,11 @@ public abstract class  Planta {
 		}
 	}	
 	
-	public Planta(String nombre, String direccion, double capacidadMax, String fechaApertura) {
+	public Planta(String nombre, String direccion, double capacidadMaxima, String fechaApertura) {
 //	    this.idPlanta = idPlanta; los metodos de IsmartGrids no requieren idPlanta
 		this.nombre = nombre;
 		this.direccion = direccion;
-		this.capacidadMax = capacidadMax;
+		this.capacidadMax = capacidadMaxima;
 		this.estado = true;// POR DEFAULT true requerimiento de ismart grids
 		this.fechaApertura = fechaApertura; 
 		this.cuotaMinima = 0; // POR DEFAULT 0, en los ejemplos que pasaron los profes no hay cuota minima aun
@@ -178,7 +178,7 @@ public abstract class  Planta {
 		return this.direccion;
 	}
 	
-	public double getCapacidadMax() {
+	public double getCapacidadMaxima() {
 		
 		return this.capacidadMax;
 		
