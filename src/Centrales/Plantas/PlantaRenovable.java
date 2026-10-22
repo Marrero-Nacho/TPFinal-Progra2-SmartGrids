@@ -2,7 +2,7 @@ package Centrales.Plantas;
 
 import Centrales.Registros.RegistroMonitoreo;
 
-public class PlantaRenovable extends Planta {
+public abstract class PlantaRenovable extends Planta {
 	private String fuentePrimaria;
 	private double eficienciaPromedio;
 	
@@ -12,21 +12,15 @@ public class PlantaRenovable extends Planta {
 		this.eficienciaPromedio = eficienciaPromedio;
 	}
 
-	@Override
-	public double getCapacidadMinimaCuota() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public boolean cumplioCuota(RegistroMonitoreo registro) {
-		// TODO Auto-generated method stub
-		return false;
+	// getCapacidadMinimaCuota() queda como abstracto, la implementacion se dara en cada clase hija de PlantaRenoble
+	
+	@Override 
+	public boolean cumplioCuota(RegistroMonitoreo registro){
+		return (registro.getEnergiaGenerada() >= this.getCuotaMinima());
 	}
 
 	@Override
 	public boolean esRenovable() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	};
 }

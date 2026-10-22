@@ -9,4 +9,20 @@ public class PlantaHidraulica extends PlantaRenovable {
 		this.cantidadTurbinas = cantidadTurbinas;
 		this.capacidadEmbalse = capacidadEmbalse;
 	}
+
+	public int getCantidadTurbinas() {
+		return cantidadTurbinas;
+	}
+
+	public void setCantidadTurbinas(int cantidadTurbinas) {
+		this.cantidadTurbinas = cantidadTurbinas;
+	}
+
+	public double getCapacidadEmbalse() {
+		return capacidadEmbalse;
+	}
+
+	public void setCapacidadEmbalse(double capacidadEmbalse) {
+		this.capacidadEmbalse = capacidadEmbalse;
+	}
 }

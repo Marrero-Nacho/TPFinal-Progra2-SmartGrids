@@ -11,4 +11,28 @@ public class PlantaEolica extends PlantaRenovable {
 		this.alturaTorres = alturaTorres;
 		this.velocidadMinimaViento = velocidadMinimaViento;
 	}
+	
+	public int getCantidadAerogeneradores() {
+		return cantidadAerogeneradores;
+	}
+
+	public void setCantidadAerogeneradores(int cantidadAerogeneradores) {
+		this.cantidadAerogeneradores = cantidadAerogeneradores;
+	}
+
+	public double getAlturaTorres() {
+		return alturaTorres;
+	}
+
+	public void setAlturaTorres(double alturaTorres) {
+		this.alturaTorres = alturaTorres;
+	}
+
+	public double getVelocidadMinimaViento() {
+		return velocidadMinimaViento;
+	}
+
+	public void setVelocidadMinimaViento(double velocidadMinimaViento) {
+		this.velocidadMinimaViento = velocidadMinimaViento;
+	}
 }
