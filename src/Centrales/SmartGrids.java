@@ -1,6 +1,8 @@
 package Centrales;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,10 +10,11 @@ import Centrales.Plantas.Planta;
 import Centrales.Plantas.PlantaEolica;
 import Centrales.Plantas.PlantaHidraulica;
 import Centrales.Plantas.PlantaSolar;
+import Centrales.Plantas.PlantaTermica;
 
 
 public class SmartGrids implements ISmartGrids {
-	private Map<String, Planta> plantas = new HashMap<>();
+	private Map<String, Planta> plantas = new LinkedHashMap<>();
 	
     @Override
     public void registrarPlantaSolar(
@@ -37,7 +40,7 @@ public class SmartGrids implements ISmartGrids {
     	 * 10				horas de radiacion
     	 * );*/
     	PlantaSolar plantaSolar = new PlantaSolar(nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, fuentePrimaria, eficienciaPromedio, superficieCubierta, cantidadPaneles, horasRadiacionDiaria);
-    	plantas.put("planta0", plantaSolar);
+    	plantas.put(nombre, plantaSolar);
     }
 
     @Override
@@ -54,23 +57,29 @@ public class SmartGrids implements ISmartGrids {
     	 * 5				velocidad minima de viento
     	 * );*/
     	PlantaEolica plantaEolica = new PlantaEolica(nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, fuentePrimaria, eficienciaPromedio, cantidadAerogeneradores, alturaTorres, velocidadMinimaViento);
-    	plantas.put("planta01", plantaEolica);
+    	plantas.put(nombre, plantaEolica);
     }
 
     @Override
     public void registrarPlantaHidraulica(String nombre, String direccion, double capacidadMaxima, String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, double eficienciaPromedio, int cantidadTurbinas, double capacidadEmbalse) {
     	PlantaHidraulica plantaHidraulica = new PlantaHidraulica(nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, fuentePrimaria, eficienciaPromedio, cantidadTurbinas, capacidadEmbalse);
-    	plantas.put("planta02", plantaHidraulica);
+    	plantas.put(nombre, plantaHidraulica);
     }
 
     @Override
     public void registrarPlantaTermica(String nombre, String direccion, double capacidadMaxima, String fechaHoraPuestaEnFuncionamiento, String tipoCombustible, double objetivoEmisionesCo2PorHora, double capacidadAlmacenamientoCombustible) {
-
+    	PlantaTermica plantaTermica = new PlantaTermica(nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, tipoCombustible, objetivoEmisionesCo2PorHora, capacidadAlmacenamientoCombustible);
+    	plantas.put(nombre, plantaTermica);
     }
 
     @Override
     public List<String> consultarPlantas() {
-        return List.of();
+    	List<String> listaPlantas = new ArrayList<>();
+    	for(Planta planta : this.plantas.values()) {
+    		String estadoActual = planta.estaActiva() ? "(ACTIVA)" : "(INACTIVA)";
+    		listaPlantas.add(planta.getNombre() + " " + estadoActual + ": " + planta.getFechaApertura().toString() + ":00");
+    	}
+        return listaPlantas;
     }
 
     @Override

@@ -13,4 +13,28 @@ public class PlantaSolar extends PlantaRenovable {
 		this.cantidadPaneles = cantidadPaneles;
 		this.superficieCubierta = superficieCubierta;
 	}
+
+	public double getHorasRadiacionDiaria() {
+		return horasRadiacionDiaria;
+	}
+
+	public void setHorasRadiacionDiaria(double horasRadiacionDiaria) {
+		this.horasRadiacionDiaria = horasRadiacionDiaria;
+	}
+
+	public Integer getCantidadPaneles() {
+		return cantidadPaneles;
+	}
+
+	public void setCantidadPaneles(Integer cantidadPaneles) {
+		this.cantidadPaneles = cantidadPaneles;
+	}
+
+	public double getSuperficieCubierta() {
+		return superficieCubierta;
+	}
+
+	public void setSuperficieCubierta(double superficieCubierta) {
+		this.superficieCubierta = superficieCubierta;
+	}
 }

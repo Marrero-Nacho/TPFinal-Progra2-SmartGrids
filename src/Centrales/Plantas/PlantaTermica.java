@@ -32,13 +32,13 @@ public class PlantaTermica extends Planta {
         }
         RegistroMonitoreoTermico rTermico = (RegistroMonitoreoTermico) registro; // ACAAA recorda esto es down casting creo xd
         
-        boolean cumplioGeneracion = rTermico.getEnergiaGenerada() >= getCapacidadMinimaCuota();
+        boolean cumplioGeneracion = rTermico.getEnergiaGenerada() >= this.getCuotaMinima();
         boolean cumpleEmision = rTermico.getCo2Generado()< this.objetivoEmisionesCo2Hora;
 
         return (cumplioGeneracion && cumpleEmision);
    }
    @Override 
-    public double getCapacidadMinimaCuota(){
+    public double getCuotaMinima(){
         return (getCapacidadMaxima()/2);
    } 
     public String getTipoCombustible(){

@@ -8,7 +8,6 @@ import java.util.List;
 import Centrales.Registros.RegistroMonitoreo;
 
 public abstract class  Planta {
-//	private Integer idPlanta;
 	private String nombre;
 	private String direccion;
 	private double capacidadMax;
@@ -19,7 +18,7 @@ public abstract class  Planta {
     private ArrayList<PeriodoInactividad> periodosInactividad;
 	
 	
-   private static class PeriodoInactividad { 
+    private static class PeriodoInactividad { 
 		private LocalDateTime inicio; 
 		private LocalDateTime fin; // null si sigue inactiva 
 		public PeriodoInactividad(LocalDateTime inicio) { 
@@ -55,7 +54,6 @@ public abstract class  Planta {
 	}
 	//metodos abstractos, adaptaran su comportamiento dependiendo la clase de planta
 	
-	public abstract double getCapacidadMinimaCuota();
 	public abstract boolean cumplioCuota(RegistroMonitoreo registro);
 	public abstract boolean esRenovable();
 	
@@ -70,10 +68,10 @@ public abstract class  Planta {
 				PeriodoInactividad ultimo = periodosInactividad.get(periodosInactividad.size() - 1);
 				if (ultimo.fin == null) {
 					ultimo.setFin(fechaHora); 
-					}
 				}
 			}
 		}
+	}
 	
 	public void desactivar(LocalDateTime fechaHora) { 
 		if (this.estado) {
@@ -86,10 +84,10 @@ public abstract class  Planta {
 		for (PeriodoInactividad p : periodosInactividad) {
 			if (p.estabaInactivaEn(fechaHora)) {
 				return true; 
-				}
 			}
-		return false; 
 		}
+	return false; 
+	}
 	
 //metodos de registro monitoreos
 	public void agregarRegistroMonitoreo(RegistroMonitoreo registro) { 
@@ -105,14 +103,12 @@ public abstract class  Planta {
 		
 		for (RegistroMonitoreo r : registrosMonitoreo) {
 			if (r.getFechaHora().equals(registro.getFechaHora())) {
-				
 				throw new RuntimeException("Ya existe un registro para esa fecha y hora.");
-				
-				}
-			
-			} 
+			}
+		
+		} 
 		this.registrosMonitoreo.add(registro); 
-		}
+	}
 	public double getTotalGenerado() {
 		double total = 0;
 		for (RegistroMonitoreo r : registrosMonitoreo) {
@@ -174,26 +170,20 @@ public abstract class  Planta {
 		return this.nombre;
 	}
 	public String getDireccion() {
-		
 		return this.direccion;
 	}
 	
 	public double getCapacidadMaxima() {
-		
 		return this.capacidadMax;
-		
 	}
 	public LocalDateTime getFechaApertura() {
 		return LocalDateTime.parse(this.fechaApertura);
-		
 	}
 	
 	public ArrayList<RegistroMonitoreo> getRegistrosMonitoreo(){
-		
 		return this.registrosMonitoreo;
 	}
 	public void setCuotaMinima(double cuotaMinima) {
-		
 		this.cuotaMinima = cuotaMinima;
 	}
 	public double getCuotaMinima() {
