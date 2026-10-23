@@ -25,7 +25,7 @@ public class SmartGridsTest {
     @Before
     public void setUp() {
         sistema = new SmartGrids();
-        // cuota = 1000 * 0.5 * 12 / 24 = 250
+        // cuota = 1000 * 0.5 * 12 / 24 = 250 -> capMax * eficienciaPromedio * hsRadiacionDiaria
         sistema.registrarPlantaSolar("Solar1", "Ruta 1", 1000, PUESTA, "Sol", 0.5, 5000, 2000, 12);
         // cuota = 400 * 0.5 = 200
         sistema.registrarPlantaEolica("Eolica1", "Ruta 2", 400, PUESTA, "Viento", 0.5, 10, 80, 5);

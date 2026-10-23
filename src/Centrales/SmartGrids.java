@@ -1,6 +1,9 @@
 package Centrales;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 //import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -9,12 +12,22 @@ import java.util.Map;
 import Centrales.Plantas.Planta;
 import Centrales.Plantas.PlantaEolica;
 import Centrales.Plantas.PlantaHidraulica;
+import Centrales.Plantas.PlantaRenovable;
 import Centrales.Plantas.PlantaSolar;
 import Centrales.Plantas.PlantaTermica;
+import Centrales.Registros.RegistroMonitoreo;
+import Centrales.Registros.RegistroMonitoreoEolico;
+import Centrales.Registros.RegistroMonitoreoTermico;
 
 
 public class SmartGrids implements ISmartGrids {
 	private Map<String, Planta> plantas = new LinkedHashMap<>();
+	
+	private void verificarNombreRepetido(String nombre) {
+		if (plantas.containsKey(nombre)) {
+    		throw new IllegalArgumentException("Ya existe una planta con ese nombre");
+    	}
+	}
 	
     @Override
     public void registrarPlantaSolar(
@@ -40,6 +53,7 @@ public class SmartGrids implements ISmartGrids {
     	 * 10				horas de radiacion
     	 * );*/
     	PlantaSolar plantaSolar = new PlantaSolar(nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, fuentePrimaria, eficienciaPromedio, superficieCubierta, cantidadPaneles, horasRadiacionDiaria);
+    	verificarNombreRepetido(nombre);
     	plantas.put(nombre, plantaSolar);
     }
 
@@ -57,18 +71,21 @@ public class SmartGrids implements ISmartGrids {
     	 * 5				velocidad minima de viento
     	 * );*/
     	PlantaEolica plantaEolica = new PlantaEolica(nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, fuentePrimaria, eficienciaPromedio, cantidadAerogeneradores, alturaTorres, velocidadMinimaViento);
+    	verificarNombreRepetido(nombre);
     	plantas.put(nombre, plantaEolica);
     }
 
     @Override
     public void registrarPlantaHidraulica(String nombre, String direccion, double capacidadMaxima, String fechaHoraPuestaEnFuncionamiento, String fuentePrimaria, double eficienciaPromedio, int cantidadTurbinas, double capacidadEmbalse) {
     	PlantaHidraulica plantaHidraulica = new PlantaHidraulica(nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, fuentePrimaria, eficienciaPromedio, cantidadTurbinas, capacidadEmbalse);
+    	verificarNombreRepetido(nombre);
     	plantas.put(nombre, plantaHidraulica);
     }
 
     @Override
     public void registrarPlantaTermica(String nombre, String direccion, double capacidadMaxima, String fechaHoraPuestaEnFuncionamiento, String tipoCombustible, double objetivoEmisionesCo2PorHora, double capacidadAlmacenamientoCombustible) {
     	PlantaTermica plantaTermica = new PlantaTermica(nombre, direccion, capacidadMaxima, fechaHoraPuestaEnFuncionamiento, tipoCombustible, objetivoEmisionesCo2PorHora, capacidadAlmacenamientoCombustible);
+    	verificarNombreRepetido(nombre);
     	plantas.put(nombre, plantaTermica);
     }
 
@@ -84,17 +101,19 @@ public class SmartGrids implements ISmartGrids {
 
     @Override
     public double capacidadMinimaCuota(String nombre) {
-        return 0;
+        return plantas.get(nombre).getCapacidadMinimaCuota();
     }
 
     @Override
     public void activarPlanta(String nombre, String fechaHora) {
-
+    	Planta planta = plantas.get(nombre);
+    	planta.activar(LocalDateTime.parse(fechaHora));
     }
 
     @Override
     public void desactivarPlanta(String nombre, String fechaHora) {
-
+    	Planta planta = plantas.get(nombre);
+    	planta.desactivar(LocalDateTime.parse(fechaHora));
     }
 
     @Override
@@ -102,25 +121,43 @@ public class SmartGrids implements ISmartGrids {
         return false;
     }
 
-    @Override
+    @Override // PARA PLANTA SOLAR E HIDRAULICA
     public void registrarMonitoreo(String nombre, String fechaHora, double energiaGenerada, int incidencias) {
-
+    	Planta planta = plantas.get(nombre);
+    	if (!(planta instanceof PlantaSolar) && !(planta instanceof PlantaHidraulica)) {
+    		throw new IllegalArgumentException("Los parametros de registro no corresponden al tipo de planta Solar o Hidraulica");
+    	}
+    	RegistroMonitoreo nuevoRegistro = new RegistroMonitoreo(LocalDateTime.parse(fechaHora), energiaGenerada, incidencias);
+    	planta.agregarRegistroMonitoreo(nuevoRegistro);
     }
 
-    @Override
+    @Override // PARA PLANTA EOLICA
     public void registrarMonitoreo(String nombre, String fechaHora, double energiaGenerada, int incidencias, double velocidadViento) {
-
+    	Planta planta = plantas.get(nombre);
+    	if (!(planta instanceof PlantaEolica)) {
+    		throw new IllegalArgumentException("Los parametros de registro no corresponden al tipo de planta Eolica");
+    	}
+    	RegistroMonitoreoEolico nuevoRegistro = new RegistroMonitoreoEolico(LocalDateTime.parse(fechaHora), energiaGenerada, incidencias, velocidadViento);
+    	planta.agregarRegistroMonitoreo(nuevoRegistro);
     }
 
-    @Override
+    @Override // PARA PLANTA TERMICA
     public void registrarMonitoreo(String nombre, String fechaHora, double energiaGenerada, int incidencias, double co2Emitido, double combustibleUtilizado) {
-
+    	Planta planta = plantas.get(nombre);
+    	if (!(planta instanceof PlantaTermica)) {
+    		throw new IllegalArgumentException("Los parametros de registro no corresponden al tipo de planta Termica");
+    	}
+    	RegistroMonitoreoTermico nuevoRegistro = new RegistroMonitoreoTermico(LocalDateTime.parse(fechaHora), energiaGenerada, incidencias, co2Emitido, combustibleUtilizado);
+    	planta.agregarRegistroMonitoreo(nuevoRegistro);
     }
 
     @Override
     public double totalGenerado(String nombre) {
+    	if (!plantas.containsKey(nombre)) {
+    		throw new IllegalArgumentException("No existe una planta con ese nombre");
+    	}
         Planta p = plantas.get(nombre);
-         return p.getTotalGenerado();
+        return p.getTotalGenerado();
     }
 
     @Override
@@ -131,17 +168,52 @@ public class SmartGrids implements ISmartGrids {
 
     @Override
     public int[] histogramaCumplimiento(String nombre, String fechaDesde, String fechaHasta) {
-        return new int[0];
+    	Planta planta = plantas.get(nombre);
+    	LocalDateTime fechaDesdeLDT = LocalDate.parse(fechaDesde).atStartOfDay(); // los tests solo envian fecha. Hay q completar HH:MM:SS para ser LocalDateTime
+    	LocalDateTime fechaHastaLDT = LocalDate.parse(fechaHasta).atStartOfDay();
+    	
+    	if (fechaDesdeLDT.isAfter(fechaHastaLDT)) {
+    		throw new RuntimeException("La fecha de inicio no puede ser posterior a la fecha de fin"); 
+    	}
+    	
+    	return planta.getHistogramaCumplimiento(fechaDesdeLDT, fechaHastaLDT);
     }
 
     @Override
     public Map<String, Integer> plantasRenovablesPorFuente() {
-        return Map.of();
+    	Map<String, PlantaRenovable> plantasRenovables = new HashMap<>();
+    	Map<String, Integer> plantasPorFuente = new HashMap<>();
+    	
+    	// PRIEMRO FILTRO SOLO LAS TIPO RENOVABLE
+    	for (Map.Entry<String, Planta> entry : plantas.entrySet()) {
+    		if (entry.getValue() instanceof PlantaRenovable) {
+    			plantasRenovables.put(entry.getKey(), (PlantaRenovable) entry.getValue());
+    		}
+    	}
+    	
+    	for(PlantaRenovable pr : plantasRenovables.values()) {
+    		String fuentePrimaria = pr.getFuentePrimaria();
+    		if (plantasPorFuente.containsKey(fuentePrimaria)) {
+    			int nuevaCantidad = plantasPorFuente.get(fuentePrimaria) + 1;
+    			plantasPorFuente.put(fuentePrimaria, nuevaCantidad);
+    		} else {
+    			plantasPorFuente.put(fuentePrimaria, 1);
+    		}
+    	}
+        return plantasPorFuente;
     }
 
     @Override
     public List<String> plantasQueNuncaCumplieronCuota() {
-        return List.of();
+    	List<String> noCumplieronCuota = new ArrayList<>();
+    	
+    	for (Planta planta: this.plantas.values()) {
+    		if (planta.nuncaCumplioCuota()) {
+    			noCumplieronCuota.add(planta.getNombre());
+    		}
+    	}
+    	
+        return noCumplieronCuota;
     }
 
     @Override
