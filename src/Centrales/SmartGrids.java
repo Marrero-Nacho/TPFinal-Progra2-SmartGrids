@@ -2,6 +2,7 @@ package Centrales;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 //import java.util.HashMap;
@@ -170,7 +171,7 @@ public class SmartGrids implements ISmartGrids {
     public int[] histogramaCumplimiento(String nombre, String fechaDesde, String fechaHasta) {
     	Planta planta = plantas.get(nombre);
     	LocalDateTime fechaDesdeLDT = LocalDate.parse(fechaDesde).atStartOfDay(); // los tests solo envian fecha. Hay q completar HH:MM:SS para ser LocalDateTime
-    	LocalDateTime fechaHastaLDT = LocalDate.parse(fechaHasta).atStartOfDay();
+    	LocalDateTime fechaHastaLDT = LocalDate.parse(fechaHasta).atTime(LocalTime.MAX);
     	
     	if (fechaDesdeLDT.isAfter(fechaHastaLDT)) {
     		throw new RuntimeException("La fecha de inicio no puede ser posterior a la fecha de fin"); 
