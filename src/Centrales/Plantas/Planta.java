@@ -89,12 +89,9 @@ public abstract class  Planta implements Comparable<Planta> {
 //metodos de registro monitoreos
 	public void agregarRegistroMonitoreo(RegistroMonitoreo registro) { 
 		if (!this.estado) {
-			
 			throw new RuntimeException("No se puede registrar monitoreo en una planta inactiva."); 
-			
 		} 
 		if (registro.getFechaHora().isBefore(LocalDateTime.parse(this.fechaApertura))) {
-			
 			throw new RuntimeException("La fecha de monitoreo es anterior a la puesta en funcionamiento."); 
 		}
 		
