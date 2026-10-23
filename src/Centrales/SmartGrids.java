@@ -119,12 +119,14 @@ public class SmartGrids implements ISmartGrids {
 
     @Override
     public double totalGenerado(String nombre) {
-        return 0;
+        Planta p = plantas.get(nombre);
+         return p.getTotalGenerado();
     }
 
     @Override
     public int[] incidenciasPorHora(String nombre) {
-        return new int[0];
+        Planta p = plantas.get(nombre);
+        return p.getIncidenciasPorHora();
     }
 
     @Override

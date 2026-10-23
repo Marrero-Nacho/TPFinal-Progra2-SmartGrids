@@ -9,7 +9,10 @@ public class PlantaHidraulica extends PlantaRenovable {
 		this.cantidadTurbinas = cantidadTurbinas;
 		this.capacidadEmbalse = capacidadEmbalse;
 	}
-
+	@Override 
+	public double getCapacidadMinimaCuota(){
+		return(getCapacidadMaxima()*getEficienciaPromedio());
+	}
 	public int getCantidadTurbinas() {
 		return cantidadTurbinas;
 	}
