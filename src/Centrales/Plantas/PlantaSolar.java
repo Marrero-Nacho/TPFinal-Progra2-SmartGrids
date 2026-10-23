@@ -1,6 +1,5 @@
 package Centrales.Plantas;
 
-import java.time.LocalDate;
 
 public class PlantaSolar extends PlantaRenovable {
 	private double horasRadiacionDiaria;
@@ -13,7 +12,10 @@ public class PlantaSolar extends PlantaRenovable {
 		this.cantidadPaneles = cantidadPaneles;
 		this.superficieCubierta = superficieCubierta;
 	}
+	public double getCapacidadMinimaCuota(){
+		return ((getCapacidadMaxima()*getEficienciaPromedio()*this.horasRadiacionDiaria)/24);
 
+	}
 	public double getHorasRadiacionDiaria() {
 		return horasRadiacionDiaria;
 	}

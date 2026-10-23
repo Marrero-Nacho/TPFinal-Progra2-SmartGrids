@@ -11,6 +11,10 @@ public class PlantaEolica extends PlantaRenovable {
 		this.alturaTorres = alturaTorres;
 		this.velocidadMinimaViento = velocidadMinimaViento;
 	}
+	@Override 
+	public double getCapacidadMinimaCuota(){
+		return (getCapacidadMaxima()*getEficienciaPromedio());
+	}
 	
 	public int getCantidadAerogeneradores() {
 		return cantidadAerogeneradores;

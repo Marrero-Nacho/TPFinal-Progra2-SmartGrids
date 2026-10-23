@@ -1,19 +1,16 @@
 package Centrales.Plantas;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 import Centrales.Registros.RegistroMonitoreo;
 
-public abstract class  Planta {
+public abstract class  Planta implements Comparable<Planta> {
 	private String nombre;
 	private String direccion;
 	private double capacidadMax;
 	private boolean estado;
 	private String fechaApertura;
-	private double cuotaMinima;
     private ArrayList<RegistroMonitoreo> registrosMonitoreo;
     private ArrayList<PeriodoInactividad> periodosInactividad;
 	
@@ -48,12 +45,12 @@ public abstract class  Planta {
 		this.capacidadMax = capacidadMaxima;
 		this.estado = true;// POR DEFAULT true requerimiento de ismart grids
 		this.fechaApertura = fechaApertura; 
-		this.cuotaMinima = 0; // POR DEFAULT 0, en los ejemplos que pasaron los profes no hay cuota minima aun
+//		this.cuotaMinima = 0; // POR DEFAULT 0, Eimino, es un dato que varia el metodo de calcular dependiendo la planta (getCapacidadCuotaMInima)
 		this.registrosMonitoreo = new ArrayList<>();
 		this.periodosInactividad = new ArrayList<>();
 	}
 	//metodos abstractos, adaptaran su comportamiento dependiendo la clase de planta
-	
+	public abstract double getCapacidadMinimaCuota();
 	public abstract boolean cumplioCuota(RegistroMonitoreo registro);
 	public abstract boolean esRenovable();
 	
@@ -165,6 +162,20 @@ public abstract class  Planta {
 		}
 		return hist; 
 	}
+	@Override 
+	public int compareTo(Planta otra){
+		if (this.getTotalGenerado() > otra.getTotalGenerado()){
+			return -1; //la planta actual tiene mas energia generada.
+		}
+		else if(this.getTotalGenerado() < otra.getTotalGenerado()){
+			return 1; //la planta actual tiene menos energia generada
+
+		}
+		else {
+			return 0; // tiene la misma energia 
+		}
+
+	}
 //getters
 	public String getNombre() {
 		return this.nombre;
@@ -183,10 +194,5 @@ public abstract class  Planta {
 	public ArrayList<RegistroMonitoreo> getRegistrosMonitoreo(){
 		return this.registrosMonitoreo;
 	}
-	public void setCuotaMinima(double cuotaMinima) {
-		this.cuotaMinima = cuotaMinima;
-	}
-	public double getCuotaMinima() {
-		return this.cuotaMinima;
-	}
+	
 }
