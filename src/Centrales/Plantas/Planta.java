@@ -191,5 +191,9 @@ public abstract class  Planta implements Comparable<Planta> {
 	public ArrayList<RegistroMonitoreo> getRegistrosMonitoreo(){
 		return this.registrosMonitoreo;
 	}
-	
+	@Override 
+	public String toString(){
+		String estadoActual = this.estaActiva() ? "(ACTIVA)" : "(INACTIVA)";
+		return this.nombre + " " + estadoActual + ": " + this.fechaApertura.toString(); 
+	}
 }

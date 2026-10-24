@@ -94,8 +94,7 @@ public class SmartGrids implements ISmartGrids {
     public List<String> consultarPlantas() {
     	List<String> listaPlantas = new ArrayList<>();
     	for(Planta planta : this.plantas.values()) {
-    		String estadoActual = planta.estaActiva() ? "(ACTIVA)" : "(INACTIVA)";
-    		listaPlantas.add(planta.getNombre() + " " + estadoActual + ": " + planta.getFechaApertura().toString() + ":00");
+    		listaPlantas.add(planta.toString());
     	}
         return listaPlantas;
     }
@@ -276,16 +275,23 @@ public class SmartGrids implements ISmartGrids {
 	@Override 
 	public String toString() { 
 		StringBuilder sb = new StringBuilder(); 
+		sb.append("\n");
 		sb.append("=== SISTEMA SMART GRIDS ===\n"); 
-		sb.append("Total de Plantas Registradas: ").append(this.plantas.size()).append("\n"); 
+		sb.append("\n");
+		sb.append("Total de Plantas Registradas: ").append(this.plantas.size()).append("\n");
+		sb.append("\n"); 
 		if (this.plantas.isEmpty()) { 
+			
 			sb.append("No hay plantas registradas actualmente en el sistema.\n"); 
+			sb.append("\n");
 		}
 		 else { 
 			sb.append("--- Detalle de Centrales Eléctricas ---\n"); 
+			sb.append("\n");
 			for (Planta planta : this.plantas.values()) { 
-				// Delega la representación en el toString() de cada Planta // 
+			
 				sb.append("	* ").append(planta.toString()).append("\n"); 
+
 			} 
 		} 
 		return sb.toString(); 
