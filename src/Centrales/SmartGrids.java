@@ -2,11 +2,13 @@ package Centrales;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
 
 import Centrales.Plantas.Planta;
 import Centrales.Plantas.PlantaEolica;
@@ -92,8 +94,7 @@ public class SmartGrids implements ISmartGrids {
     public List<String> consultarPlantas() {
     	List<String> listaPlantas = new ArrayList<>();
     	for(Planta planta : this.plantas.values()) {
-    		String estadoActual = planta.estaActiva() ? "(ACTIVA)" : "(INACTIVA)";
-    		listaPlantas.add(planta.getNombre() + " " + estadoActual + ": " + planta.getFechaApertura().toString() + ":00");
+    		listaPlantas.add(planta.toString());
     	}
         return listaPlantas;
     }
@@ -169,7 +170,7 @@ public class SmartGrids implements ISmartGrids {
     public int[] histogramaCumplimiento(String nombre, String fechaDesde, String fechaHasta) {
     	Planta planta = plantas.get(nombre);
     	LocalDateTime fechaDesdeLDT = LocalDate.parse(fechaDesde).atStartOfDay(); // los tests solo envian fecha. Hay q completar HH:MM:SS para ser LocalDateTime
-    	LocalDateTime fechaHastaLDT = LocalDate.parse(fechaHasta).atStartOfDay();
+    	LocalDateTime fechaHastaLDT = LocalDate.parse(fechaHasta).atTime(LocalTime.MAX);
     	
     	if (fechaDesdeLDT.isAfter(fechaHastaLDT)) {
     		throw new RuntimeException("La fecha de inicio no puede ser posterior a la fecha de fin"); 
@@ -217,21 +218,82 @@ public class SmartGrids implements ISmartGrids {
 
     @Override
     public String horasSinVelocidadMinimaPorPlantaEolica() {
-        return "";
+        StringBuilder sb = new StringBuilder("Plantas Eolicas: Horas con poco viento\\n"); 
+		for (Planta planta : plantas.values()) { 
+			if (planta instanceof PlantaEolica eolica) { 
+				String lineasHoras = eolica.getReporteHorasSinVelocidadMinima();
+		    
+				if (!lineasHoras.isEmpty()) { 
+					double velMin = eolica.getVelocidadMinimaViento(); 
+					String velMinStr = (velMin % 1 == 0) ? String.format("%.0f", velMin) : String.valueOf(velMin); 
+					sb.append(" - ").append(eolica.getNombre()).append(": ").append(velMinStr).append(" m/s\\n").append(lineasHoras);
+			    }
+			}
+
+		}
+		return sb.toString();
     }
 
     @Override
     public int limpiarMonitoreosSinDatos() {
-        return 0;
+		int acum = 0;
+        for (Planta planta: this.plantas.values()) {
+    		acum += planta.limpiarMonitoreoSinDatos();
+    	}
+		return acum;
     }
 
     @Override
     public List<String> plantasOrdenadasPorEnergiaGenerada() {
-        return List.of();
+		ArrayList<Planta> plantasOrdenadas = new ArrayList<>(this.plantas.values());
+		Collections.sort(plantasOrdenadas); // ordena usando compareto
+		//ahora le doy formato de cadena de String
+		List<String> plantasOrdenadasString = new ArrayList<>();
+		for(Planta planta : plantasOrdenadas){
+			StringBuilder sb = new StringBuilder(); 
+			sb.append(planta.getNombre()) .append(": ") .append(planta.getTotalGenerado());
+			plantasOrdenadasString.add(sb.toString());
+		}
+		return plantasOrdenadasString;
     }
 
     @Override
     public List<String> plantasInactivasEn(String fechaHora) {
-        return List.of();
+        LocalDateTime fechaHoraLDT = LocalDateTime.parse(fechaHora);
+		ArrayList<Planta> listaPlantas = new ArrayList<>(this.plantas.values());
+		List<String> plantasInactivas = new ArrayList<>();
+		for (Planta p : listaPlantas){
+			if (p.estabaInactivaEn(fechaHoraLDT)){
+				plantasInactivas.add(p.getNombre());
+			}
+
+		}
+		return plantasInactivas;
+
+
     }
+	@Override 
+	public String toString() { 
+		StringBuilder sb = new StringBuilder(); 
+		sb.append("\n");
+		sb.append("=== SISTEMA SMART GRIDS ===\n"); 
+		sb.append("\n");
+		sb.append("Total de Plantas Registradas: ").append(this.plantas.size()).append("\n");
+		sb.append("\n"); 
+		if (this.plantas.isEmpty()) { 
+			
+			sb.append("No hay plantas registradas actualmente en el sistema.\n"); 
+			sb.append("\n");
+		}
+		 else { 
+			sb.append("--- Detalle de Centrales Eléctricas ---\n"); 
+			sb.append("\n");
+			for (Planta planta : this.plantas.values()) { 
+			
+				sb.append("	* ").append(planta.toString()).append("\n"); 
+
+			} 
+		} 
+		return sb.toString(); 
+	} 
 }
